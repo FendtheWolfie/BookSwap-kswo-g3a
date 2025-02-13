@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BookSwap - Startseite</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+</head>
+
+<body>
+    <header>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <!-- Logo -->
+                <a class="navbar-brand" href="/">
+                    <button class="btn btn-link p-0" style="border: none;">
+                        <img src="/images/logo-transparent-svg.svg" alt="BookSwap Logo" height="50" />
+                    </button>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="inseraterstellen">
+                                <i class="bi bi-plus"></i>
+                                Angebot erstellen
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="login" class="btn btn-primary">
+                                <i class="bi bi-person"></i>
+                                Anmelden
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Search Bar -->
+        <div class="container mt-4">
+            <div class="input-group">
+                <input type="text" class="form-control" id="search-input" placeholder="Suche nach Artikel"
+                    onkeypress="handleKeyPress(event)">
+                <button class="btn btn-primary" type="button" id="search-button" onclick="searchItems()"></button>
+                <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="container mt-3">
+            <ul class="nav nav-pills justify-content-center">
+                <li class="nav-item">
+                    <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#sidebar">
+                        <i class="bi bi-list"></i>
+                        Alle Kategorien
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="kategorie?category=Mathematik">Mathe</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="kategorie?category=Deutsch">Deutsch</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="kategorie?category=Englisch">Englisch</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="kategorie?category=Französisch">Französisch</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="kategorie?category=Geografie">Geografie</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="kategorie?category=Geschichte">Geschichte</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="kategorie?category=Wirtschaft">Wirtschaft</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="kategorie?category=Recht">Recht</a>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="container mt-4">
+        <h2 id="category-name"></h2>
+        <div class="row row-cols-1 row-cols-md-5 g-4" id="category-section"></div>
+    </div>
+
+    <!--Offcanvas-->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="sidebar-label">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="sidebar-label">Erweiterte Suchfunktionen </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <form>
+                <!-- Schulfach Dropdown -->
+                <div class="mb-3">
+                    <label for="subject" class="form-label">Schulfach</label>
+                    <select id="subject" class="form-select">
+                        <option value="">Bitte wählen...</option>
+                        <option value="Mathematik">Mathematik</option>
+                        <option value="Deutsch">Deutsch</option>
+                        <option value="Englisch">Englisch</option>
+                        <option value="Französisch">Französisch</option>
+                        <option value="Geografie">Geografie</option>
+                        <option value="Geschichte">Geschichte</option>
+                        <option value="Wirtschaft">Wirtschaft</option>
+                        <option value="Recht">Recht</option>
+                    </select>
+                </div>
+
+                <!-- Erscheinungsjahr Dropdown -->
+                <div class="mb-3">
+                    <label for="year" class="form-label">Erscheinungsjahr</label>
+                    <select id="year" class="form-select">
+                        <option value="">Bitte wählen...</option>
+                        <!-- Dynamisch generierte Optionen von 2010 bis 2025 -->
+                        <script>
+                            for (let year = 2010; year <= 2025; year++) {
+                                document.write(`<option value="${year}">${year}</option>`);
+                            }
+                        </script>
+                    </select>
+                </div>
+
+                <!-- Zustand des Buches Radio Buttons -->
+                <div class="mb-3">
+                    <label class="form-label">Zustand des Buches</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="bookCondition" value="Wie neu"
+                            id="conditionNew">
+                        <label class="form-check-label" for="conditionNew">Wie neu</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="bookCondition" value="Guter Zustand"
+                            id="conditionGood">
+                        <label class="form-check-label" for="conditionGood">Guter Zustand</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="bookCondition" value="Akzeptabel"
+                            id="conditionAcceptable">
+                        <label class="form-check-label" for="conditionAcceptable">Akzeptabel</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="bookCondition" value="Stark gebraucht"
+                            id="conditionUsed">
+                        <label class="form-check-label" for="conditionUsed">Stark gebraucht</label>
+                    </div>
+                </div>
+
+                <!-- Niveau Dropdown -->
+                <div class="mb-3">
+                    <label for="level" class="form-label">Niveau</label>
+                    <select id="level" class="form-select">
+                        <option value="">Bitte wählen...</option>
+                        <option value="Realschule">Realschule</option>
+                        <option value="Sekundarschule">Sekundarschule</option>
+                        <option value="Bezirkschule">Bezirkschule</option>
+                        <option value="Berufschule">Berufschule</option>
+                        <option value="Kantonsschule">Kantonsschule</option>
+                        <option value="Hochschule">Hochschule</option>
+                        <option value="Universität">Universität</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Preis</label>
+                    <select id="price" class="form-select">
+                        <option value="">Bitte wählen...</option>
+                        <option value="0-5">Unter 5 CHF</option>
+                        <script>
+                            for (let i = 5; i <= 95; i += 5) {
+                                document.write(`<option value="${i}-${i + 5}">${i}-${i + 5} CHF</option>`);
+                            }
+                        </script>
+                        <option value="100+">Über 100 CHF</option>
+                    </select>
+                </div>
+
+                <!-- Suchbutton -->
+                <button type="submit" class="btn btn-primary">Suchen</button>
+            </form>
+            <div id="search-results" class="mt-4"></div>
+        </div>
+    </div>
+
+<!-- skript um die schfunktion zu ermöglichen -->
+
+    <script>
+        function searchItems() {
+            const searchTerm = document.getElementById('search-input').value;
+            localStorage.setItem('searchTerm', searchTerm);
+            window.location.href = `/search?query=${encodeURIComponent(searchTerm)}`;
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                searchItems();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchTerm = localStorage.getItem('searchTerm');
+            if (searchTerm) {
+                document.getElementById('search-input').value = searchTerm;
+                localStorage.removeItem('searchTerm');
+            }
+        });
+    </script>
+    <script>
+        // funktion um die query parameter zu bekommen
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Function to create a book card
+        function createCard(title, price, year, condition, level, image) {
+            return `
+            <div class="col">
+            <a href="Angebotsansicht?title=${encodeURIComponent(title)}&price=${price}&year=${year}&condition=${encodeURIComponent(condition)}&level=${encodeURIComponent(level)}" class="text-decoration-none">
+            <div class="card">
+                <img src="${image}" class="card-img-top" alt="${title}">
+                <div class="card-body">
+                <h5 class="card-title">${title}</h5>
+                <p class="card-text">Preis: ${price} CHF</p>
+                <p class="card-text">Erscheinungsjahr: ${year}</p>
+                <p class="card-text">Zustand: ${condition}</p>
+                <p class="card-text">Niveau: ${level}</p>
+                </div>
+            </div>
+            </a>
+            </div>
+            `;
+        }
+
+        //funktion um die bücher zu bekommen
+        function populateBooks(searchTerm) {
+            fetch('/api/books')
+                .then(response => response.json())
+                .then(data => {
+                    const books = data.books.filter(book => book.bookTitle.toLowerCase().includes(searchTerm.toLowerCase()));
+                    const section = document.getElementById("category-section");
+                    section.innerHTML = "";
+                    books.forEach(book => {
+                        const images = book.filelocation.split(';');
+                        const image = images.length > 0 ? images[0] : 'https://via.placeholder.com/250';
+                        section.innerHTML += createCard(book.bookTitle, book.price, book.publicationYear, book.bookCondition, book.educationLevel, image, book.description, book.subject, book.bookid, book.webauthentication);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching books:', error);
+                });
+        }
+        //funktion um die kategorie zu bekommen
+        function createCard(title, price, year, condition, level, image, description, subject, bookid, webauthentication) {
+            return `
+            <div class="col">
+                <a href="Angebotsansicht?title=${encodeURIComponent(title)}
+                &price=${encodeURIComponent(price)}
+                &year=${encodeURIComponent(year)}
+                &condition=${encodeURIComponent(condition)}
+                &level=${encodeURIComponent(level)}
+                &description=${encodeURIComponent(description || "Keine Beschreibung verfügbar")}
+                &image=${encodeURIComponent(image || "https://via.placeholder.com/250")}
+                &subject=${encodeURIComponent(subject || "Schulfach nicht angegeben")}
+                &bookid=${encodeURIComponent(bookid)}
+                &webauthentication=${encodeURIComponent(webauthentication)}">
+                <div class="card">
+                <div class="card-body">
+                    <div class="image-container" style="width: 100%; height: 250px; display: flex; align-items: center; justify-content: center; overflow: hidden; background-color: #f0f0f0;">
+                    <img src="${image || "https://via.placeholder.com/250"}" class="card-img-top" alt="Buchbild" style="max-width: 100%; max-height: 100%; object-fit: contain;"/>
+                    </div>
+                    <h5 class="card-title mt-3">${title}</h5>
+                    <p class="card-text">Preis: ${price} CHF</p>
+                    <p class="card-text">Erscheinungsjahr: ${year}</p>
+                    <p class="card-text">Zustand: ${condition}</p>
+                    <p class="card-text">Niveau: ${level}</p>
+                </div>
+                </div>
+                </a>
+            </div>
+            `;
+        }
+
+
+
+        // suchfunktion
+        document.getElementById("search-button").addEventListener("click", () => {
+            const searchTerm = document.getElementById("search-input").value;
+            populateBooks(searchTerm);
+        });
+
+        //seiten laden
+        document.addEventListener("DOMContentLoaded", () => {
+            const searchTerm = getQueryParam("query") || "";
+            document.getElementById("search-input").value = searchTerm;
+            populateBooks(searchTerm);
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
